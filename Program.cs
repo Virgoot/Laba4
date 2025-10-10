@@ -9,7 +9,7 @@ class Program
 
         while (isRunning)
         {
-            printMenu();
+            PrintMenu();
 
             int userInput;
             bool validMenuChoice = int.TryParse(Console.ReadLine(), out userInput);
@@ -18,32 +18,29 @@ class Program
             {
                 switch (userInput)
                 {
-                    case 1:
-                        {
-
-                            firstCase();
-
-                        }
+                    case 1:  
+                        FirstCase();
                         break;
 
                     case 2:
-                        {
-                            secondCase();
-                        }
+                        
+                        SecondCase();
+                        
                         break;
-
                     case 3:
-                        thirdCase();
-                        break;
+                        
+                        ThirdCase();
+                        break;   
+                        
                     case 4:
-                        FourthCase();
+                        
+                        MakeBoard();
                         break;
+                        
                     case 5:
-                        {
-                            isRunning = fifthCase();
-                            break;
-                        }
-                        break;
+                        
+                        isRunning = FifthCase();
+                        break;      
                 }
             }
             else
@@ -53,12 +50,12 @@ class Program
         }
     }
 
-    static string printArrayInfo(int[] array)
+    static string PrintArrayInfo(int[] array)
     {
         return "[ " + string.Join(" ", array) + " ]";
     }
 
-    static void printMenu()
+    static void PrintMenu()
     {
         Console.WriteLine("1. Отгадать ответ");
         Console.WriteLine("2. Об авторе");
@@ -68,7 +65,7 @@ class Program
         Console.WriteLine("Выберите вариант (1-5): ");
     }
 
-    static void firstCase()
+    static void FirstCase()
     {
         const double PI = Math.PI;
         const double epsilon = 0.01;
@@ -120,14 +117,14 @@ class Program
         }
     }
 
-    static void secondCase()
+    static void SecondCase()
     {
         Console.WriteLine("\n----------------------------------------");
         Console.WriteLine("Кошель Виталий Михайлович / 6106-090301D");
         Console.WriteLine("----------------------------------------\n");
     }
 
-    static void thirdCase()
+    static void ThirdCase()
     {
         int sizeOfArray;
 
@@ -173,8 +170,8 @@ class Program
             }
             Console.WriteLine("]\n");
 
-            int[] arrayForGnomeSort = getCopyOfArray(array);
-            int[] arrayForCocktailSort = getCopyOfArray(array);
+            int[] arrayForGnomeSort = GetCopyOfArray(array);
+            int[] arrayForCocktailSort = GetCopyOfArray(array);
 
 
 
@@ -184,7 +181,7 @@ class Program
             // Гномья сортировка 
             // -------------------------
             stopwatch.Start();
-            gnomeSort(arrayForGnomeSort);
+            GnomeSort(arrayForGnomeSort);
             stopwatch.Stop();
             Console.WriteLine($">> 1.Gnome Sort - Время выполнения сортировки: {stopwatch.Elapsed.TotalMilliseconds} мс\n");
             // -------------------------
@@ -195,7 +192,7 @@ class Program
             // -------------------------
 
             stopwatch.Start();
-            cocktailSort(arrayForCocktailSort);
+            CocktailSort(arrayForCocktailSort);
             stopwatch.Stop();
             Console.WriteLine($">> 2.Cocktail Sort - Время выполнения сортировки: {stopwatch.Elapsed.TotalMilliseconds} мс\n");
             // -------------------------
@@ -207,8 +204,8 @@ class Program
             if (sizeOfArray <= 10)
             {
                 Console.WriteLine("|-------------------------------------------------------------|");
-                Console.WriteLine($"   После Gnome Sort: {printArrayInfo(arrayForGnomeSort)}");
-                Console.WriteLine($"   После Cocktail Sort: {printArrayInfo(arrayForCocktailSort)}");
+                Console.WriteLine($"   После Gnome Sort: {PrintArrayInfo(arrayForGnomeSort)}");
+                Console.WriteLine($"   После Cocktail Sort: {PrintArrayInfo(arrayForCocktailSort)}");
                 Console.WriteLine("|-------------------------------------------------------------|\n");
             }
             else
@@ -221,26 +218,46 @@ class Program
 
 
     }
-    
-    static void FourthCase()
+
+    static void MakeBoard()
     {
-        char[,] board = new char[8, 8];
+        string[,] board = new string[8, 8];
 
-        for (int row = 0; row < 8; row++)
+        for (int i = 0; i < 8; i++)
         {
-            // Верхняя рамка строки
-            Console.Write("+--+--+--+--+--+--+--+--+\n");
+            for (int h = 0; h < 3; h++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if ((i + j) % 2 == 0)
+                    {
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkGray;
+                    }
 
-            for (int col = 0; col < 8; col++)
-                Console.Write($"| {board[row, col]} ");
-
-            Console.Write("|\n");
+                    Console.Write("        ");
+                }
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            
         }
-        // Нижняя рамка после последней строки
-        Console.Write("+--+--+--+--+--+--+--+--+\n");
+
+        Console.ResetColor();
+        
     }
 
-    static bool fifthCase()
+
+
+    static void ChessGame(string[,] board)
+    {
+        
+    }
+
+    static bool FifthCase()
     {
         Console.WriteLine("Вы уверены?: (д/н)");
         string userAnswer = Console.ReadLine();
@@ -258,11 +275,11 @@ class Program
     }
 
 
-    static int[] getCopyOfArray(int[] array)
+    static int[] GetCopyOfArray(int[] array)
     {
         return (int[])array.Clone();
     }
-    static void gnomeSort(int[] array)
+    static void GnomeSort(int[] array)
     {
         int index = 0;
         while (index < array.Length)
@@ -281,7 +298,7 @@ class Program
         }
     }
 
-    static void cocktailSort(int[] array)
+    static void CocktailSort(int[] array)
     {
         int left = 0;
         int right = array.Length - 1;
