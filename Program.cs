@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
+using System.Runtime;
+using System.Threading.Tasks.Dataflow;
 
 class Program
 {
@@ -33,8 +36,8 @@ class Program
                         break;   
                         
                     case 4:
-                        
-                        MakeBoard();
+
+                        ChessGame();
                         break;
                         
                     case 5:
@@ -221,40 +224,88 @@ class Program
 
     static void MakeBoard()
     {
+        Console.WriteLine("===============================================================\n");
+        
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
         string[,] board = new string[8, 8];
+
+        // Чёрные фигуры
+        board[0, 0] = board[0, 7] = "♜";
+        board[0, 1] = board[0, 6] = "♞";
+        board[0, 2] = board[0, 5] = "♝";
+        board[0, 3] = "♛";
+        board[0, 4] = "♚";
+        for (int i = 0; i < 8; i++) board[1, i] = "♟";
+
+        // Белые фигуры
+        board[7, 0] = board[7, 7] = "♖";
+        board[7, 1] = board[7, 6] = "♘";
+        board[7, 2] = board[7, 5] = "♗";
+        board[7, 3] = "♕";
+        board[7, 4] = "♔";
+        for (int i = 0; i < 8; i++) board[6, i] = "♙";
+
+        for (int r = 2; r < 6; r++)
+            for (int c = 0; c < 8; c++)
+                board[r, c] = " ";
 
         for (int i = 0; i < 8; i++)
         {
             for (int h = 0; h < 3; h++)
             {
+
+                if (h == 1)
+                Console.Write($"{8 - i}  ");
+                else
+                    Console.Write("   ");  
+
                 for (int j = 0; j < 8; j++)
                 {
                     if ((i + j) % 2 == 0)
-                    {
                         Console.BackgroundColor = ConsoleColor.White;
+                    else
+                        Console.BackgroundColor = ConsoleColor.DarkGray;
+
+                    if (h == 1)
+                    {
+                        string piece = board[i, j];
+                        Console.Write($"   {piece}   ");
                     }
                     else
                     {
-                        Console.BackgroundColor = ConsoleColor.DarkGray;
+                        Console.Write("       ");
                     }
 
-                    Console.Write("        ");
+                    Console.ResetColor();
                 }
-                Console.ResetColor();
                 Console.WriteLine();
             }
-            
-        }
 
+        }
+        Console.WriteLine();
+        Console.Write("      A      B      C      D      E      F      G      H");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("===============================================================\n");
         Console.ResetColor();
-        
     }
 
 
 
-    static void ChessGame(string[,] board)
+
+    static void ChessGame()
     {
+        MakeBoard();
+
         
+
+
+        
+        
+
+
+
     }
 
     static bool FifthCase()
