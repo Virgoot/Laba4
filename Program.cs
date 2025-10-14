@@ -222,7 +222,7 @@ class Program
 
     }
 
-    static void MakeBoard()
+    static string[,] MakeBoard()
     {
         Console.WriteLine("===============================================================\n");
         
@@ -289,6 +289,8 @@ class Program
         Console.WriteLine();
         Console.WriteLine("===============================================================\n");
         Console.ResetColor();
+
+        return board;
     }
 
 
@@ -296,16 +298,42 @@ class Program
 
     static void ChessGame()
     {
-        MakeBoard();
-
         
 
+        int number = 0;
+        bool validInput = false;
 
+
+
+        while (!validInput)
+        {
+            Console.WriteLine("За какой цвет вы хотите играть?");
+            Console.WriteLine("Белые - 1\nЧёрные - 2");
+
+            string input = Console.ReadLine();
+
+            if (int.TryParse(input, out number) && (number == 1 || number == 2))
+            {
+                validInput = true;
+            }
+            else
+            {
+                Console.WriteLine("\nВведите 1 или 2!\n");
+            }
+        }
+
+        if (number == 1)
+        {
+            Console.WriteLine("Ваш выбор - белые фигуры");
+        }
+        else
+        {
+            Console.WriteLine("Ваш выбор - черные фигуры");
+        }
         
-        
+        // Создание доски йоу
 
-
-
+        string[,] board = MakeBoard();4
     }
 
     static bool FifthCase()
