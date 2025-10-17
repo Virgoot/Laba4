@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.IO.Pipes;
 using System.Runtime;
 using System.Threading.Tasks.Dataflow;
 
@@ -8,6 +9,7 @@ class Program
 {
     static void Main()
     {
+
         bool isRunning = true;
 
         while (isRunning)
@@ -333,7 +335,7 @@ class Program
         
         // Создание доски йоу
 
-        string[,] board = MakeBoard();4
+        string[,] board = MakeBoard();
     }
 
     static bool FifthCase()
@@ -407,7 +409,6 @@ class Program
             left++;
         }
     }
-        
-
+    
 
 }
