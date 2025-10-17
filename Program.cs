@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Runtime;
+using System.Security;
 using System.Threading.Tasks.Dataflow;
 
 class Program
@@ -258,9 +259,14 @@ class Program
             {
 
                 if (h == 1)
-                Console.Write($"{8 - i}  ");
+                {
+                    Console.Write($"{8 - i}  ");
+                }
                 else
-                    Console.Write("   ");  
+                {
+                    Console.Write("   ");
+                }
+
 
                 for (int j = 0; j < 8; j++)
                 {
@@ -300,12 +306,8 @@ class Program
 
     static void ChessGame()
     {
-        
-
         int number = 0;
         bool validInput = false;
-
-
 
         while (!validInput)
         {
@@ -324,6 +326,9 @@ class Program
             }
         }
 
+        bool isPlayerWhiteReady = false;
+        bool isPlayerBlackReady = false;
+
         if (number == 1)
         {
             Console.WriteLine("Ваш выбор - белые фигуры");
@@ -332,10 +337,12 @@ class Program
         {
             Console.WriteLine("Ваш выбор - черные фигуры");
         }
-        
+
+        isPlayerWhiteReady = true;
+
         // Создание доски йоу
 
-        string[,] board = MakeBoard();
+        string[,] board = MakeBoard();4
     }
 
     static bool FifthCase()
