@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO.Pipes;
 using System.Runtime;
 using System.Security;
@@ -225,33 +226,39 @@ class Program
 
     }
 
-    static string[,] MakeBoard()
+    static Piece[,] CreateBoard()
     {
-        Console.WriteLine("===============================================================\n");
         
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        Piece?[,] board = new Piece?[8, 8];
 
-        string[,] board = new string[8, 8];
 
-        // Чёрные фигуры
-        board[0, 0] = board[0, 7] = "♜";
-        board[0, 1] = board[0, 6] = "♞";
-        board[0, 2] = board[0, 5] = "♝";
-        board[0, 3] = "♛";
-        board[0, 4] = "♚";
-        for (int i = 0; i < 8; i++) board[1, i] = "♟";
+        board[7, 0] = board[7, 7] = new Rook("White");
+        board[7, 1] = board[7, 6] = new Piece { Type = Pieces.Knight, Color = "White", Symbol = '♞' };
+        board[7, 2] = board[7, 5] = new Piece { Type = Pieces.Bishop, Color = "White", Symbol = '♝' };
+        board[7, 3] = new Piece { Type = Pieces.Queen, Color = "White", Symbol = '♛' };
+        board[7, 4] = new Piece { Type = Pieces.King, Color = "White", Symbol = '♚' };
+        for (int i = 0; i < 8; i++) board[6, i] = new Pawn("White");
 
-        // Белые фигуры
-        board[7, 0] = board[7, 7] = "♖";
-        board[7, 1] = board[7, 6] = "♘";
-        board[7, 2] = board[7, 5] = "♗";
-        board[7, 3] = "♕";
-        board[7, 4] = "♔";
-        for (int i = 0; i < 8; i++) board[6, i] = "♙";
+        board[0, 0] = board[0, 7] = new Rook("Black");
+        board[0, 1] = board[0, 6] = new Piece { Type = Pieces.Knight, Color = "Black", Symbol = '♘' };
+        board[0, 2] = board[0, 5] = new Piece { Type = Pieces.Bishop, Color = "Black", Symbol = '♗' };
+        board[0, 3] = new Piece { Type = Pieces.Queen, Color = "Black", Symbol = '♕' };
+        board[0, 4] = new Piece { Type = Pieces.King, Color = "Black", Symbol = '♔' };
+        for (int i = 0; i < 8; i++) board[1, i] = new Pawn("Black");
 
         for (int r = 2; r < 6; r++)
             for (int c = 0; c < 8; c++)
-                board[r, c] = " ";
+                board[r, c] = null;
+
+
+        return board;
+    }
+
+    static void  DrawBoard(Piece[,] board)
+    {
+        Console.WriteLine("===============================================================\n");
+
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
 
         for (int i = 0; i < 8; i++)
         {
@@ -277,13 +284,21 @@ class Program
 
                     if (h == 1)
                     {
-                        string piece = board[i, j];
-                        Console.Write($"   {piece}   ");
+                        Piece piece = board[i, j];
+
+                        if (piece != null)
+                        {
+                            Console.Write($"   {piece.Symbol}   ");
+                        }
+                        else
+                        {
+                            Console.Write("       ");
+                        }
                     }
                     else
                     {
                         Console.Write("       ");
-                    }
+                    }       
 
                     Console.ResetColor();
                 }
@@ -297,52 +312,74 @@ class Program
         Console.WriteLine();
         Console.WriteLine("===============================================================\n");
         Console.ResetColor();
-
-        return board;
-    }
+    }        
 
 
 
 
     static void ChessGame()
     {
-        int number = 0;
-        bool validInput = false;
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        while (!validInput)
+        Piece[,] board = CreateBoard();
+        bool whiteTurn = true;
+
+        while (true)
         {
-            Console.WriteLine("За какой цвет вы хотите играть?");
-            Console.WriteLine("Белые - 1\nЧёрные - 2");
+            DrawBoard(board);
 
-            string input = Console.ReadLine();
+            string currentColor = whiteTurn ? "White" : "Black";
 
-            if (int.TryParse(input, out number) && (number == 1 || number == 2))
+            Console.WriteLine($"{currentColor} ходят. Укажите фигуру (например A2): ");
+            string start = Console.ReadLine().ToUpper();
+            Console.WriteLine("Укажите куда хотите походить (например A4): ");
+            string end = Console.ReadLine().ToUpper();
+
+
+            int startRow = 8 - int.Parse(start[1].ToString());
+            int startCol = start[0] - 'A';
+            int endRow = 8 - int.Parse(end[1].ToString());
+            int endCol = end[0] - 'A';
+
+            Piece selected = board[startRow, startCol];
+
+            if (selected == null)
             {
-                validInput = true;
+                Console.WriteLine("В этой клетке нет фигуры!");
+                continue;
             }
-            else
+            else if (selected.Color != currentColor)
             {
-                Console.WriteLine("\nВведите 1 или 2!\n");
+                Console.WriteLine("Вы не можете ходить чужой фигурой");
+                continue;
             }
+
+            bool canMove = false;
+            if (selected.Type == Pieces.Rook)
+            {
+                Rook rook = new Rook(selected.Color);
+                canMove = rook.CanMove(start, end, board);
+            }
+            else if (selected.Type == Pieces.Pawn)
+            {
+                Pawn pawn = new Pawn(selected.Color);
+                canMove = pawn.CanMove(start, end, board);
+            }
+
+            if (!canMove)
+            {
+                continue;
+            }
+
+
+            board[endRow, endCol] = board[startRow, startCol];
+            board[startRow, startCol] = null;
+
+            whiteTurn = !whiteTurn;
+
         }
 
-        bool isPlayerWhiteReady = false;
-        bool isPlayerBlackReady = false;
-
-        if (number == 1)
-        {
-            Console.WriteLine("Ваш выбор - белые фигуры");
-        }
-        else
-        {
-            Console.WriteLine("Ваш выбор - черные фигуры");
-        }
-
-        isPlayerWhiteReady = true;
-
-        // Создание доски йоу
-
-        string[,] board = MakeBoard();4
+        
     }
 
     static bool FifthCase()
