@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Pipes;
+using System.Net;
 using System.Runtime;
 using System.Security;
 using System.Threading.Tasks.Dataflow;
+using System.Text.RegularExpressions;
 
 class Program
 {
@@ -233,17 +236,17 @@ class Program
 
 
         board[7, 0] = board[7, 7] = new Rook("White");
-        board[7, 1] = board[7, 6] = new Piece { Type = Pieces.Knight, Color = "White", Symbol = '♞' };
-        board[7, 2] = board[7, 5] = new Piece { Type = Pieces.Bishop, Color = "White", Symbol = '♝' };
-        board[7, 3] = new Piece { Type = Pieces.Queen, Color = "White", Symbol = '♛' };
-        board[7, 4] = new Piece { Type = Pieces.King, Color = "White", Symbol = '♚' };
+        board[7, 1] = board[7, 6] = new Knight("White");
+        board[7, 2] = board[7, 5] = new Bishop("White");
+        board[7, 3] = new Queen("White");
+        board[7, 4] = new King("White");
         for (int i = 0; i < 8; i++) board[6, i] = new Pawn("White");
 
         board[0, 0] = board[0, 7] = new Rook("Black");
-        board[0, 1] = board[0, 6] = new Piece { Type = Pieces.Knight, Color = "Black", Symbol = '♘' };
-        board[0, 2] = board[0, 5] = new Piece { Type = Pieces.Bishop, Color = "Black", Symbol = '♗' };
-        board[0, 3] = new Piece { Type = Pieces.Queen, Color = "Black", Symbol = '♕' };
-        board[0, 4] = new Piece { Type = Pieces.King, Color = "Black", Symbol = '♔' };
+        board[0, 1] = board[0, 6] = new Knight("Black");
+        board[0, 2] = board[0, 5] = new Bishop("Black");
+        board[0, 3] = new Queen("Black");
+        board[0, 4] = new King("Black");
         for (int i = 0; i < 8; i++) board[1, i] = new Pawn("Black");
 
         for (int r = 2; r < 6; r++)
@@ -315,6 +318,62 @@ class Program
     }        
 
 
+   static string MoveInput(string message)
+    {
+        Regex validCell = new Regex("^[A-H][1-8]$");
+        string cell;
+
+        while (true)
+        {
+            Console.WriteLine(message);
+
+            cell = Console.ReadLine().ToUpper();
+
+            if (validCell.IsMatch(cell))
+            {
+                return cell;
+            }
+                
+            Console.WriteLine("Неверный ввод! Введите клетку в формате буква(А-H) + цифра(1-8).");
+        }
+    }
+
+
+    static bool CheckMove(Piece selected, string currentColor, string start, string end, Piece[,] board)
+    {
+        if (selected == null)
+        {
+            Console.WriteLine("В этой клетке нет фигуры!");
+            return false;
+        }
+        if (selected.Color != currentColor)
+        {
+            Console.WriteLine("Вы не можете ходить чужой фигурой!");
+            return false;
+        }
+        if (!selected.CanMove(start, end, board))
+        {
+            Console.WriteLine("Фигура не может так ходить!");
+            return false;
+        }
+        return true;
+    }
+
+
+    static bool IsKingAlive(Piece[,] board, string color)
+    {
+        for (int r = 0; r < 8; r++)
+        {
+            for (int c = 0; c < 8; c++)
+            {
+                if (board[r, c] != null && board[r, c].Type == Pieces.King && board[r, c].Color == color)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
     static void ChessGame()
@@ -330,11 +389,11 @@ class Program
 
             string currentColor = whiteTurn ? "White" : "Black";
 
-            Console.WriteLine($"{currentColor} ходят. Укажите фигуру (например A2): ");
-            string start = Console.ReadLine().ToUpper();
-            Console.WriteLine("Укажите куда хотите походить (например A4): ");
-            string end = Console.ReadLine().ToUpper();
+            string start = MoveInput($"{currentColor} ходят. Укажите фигуру (например A2): ");
+            string end = MoveInput("Укажите куда хотите походить (например A4): ");
 
+
+            
 
             int startRow = 8 - int.Parse(start[1].ToString());
             int startCol = start[0] - 'A';
@@ -343,37 +402,27 @@ class Program
 
             Piece selected = board[startRow, startCol];
 
-            if (selected == null)
+            if (!CheckMove(selected, currentColor, start, end, board))
             {
-                Console.WriteLine("В этой клетке нет фигуры!");
-                continue;
-            }
-            else if (selected.Color != currentColor)
-            {
-                Console.WriteLine("Вы не можете ходить чужой фигурой");
-                continue;
+                Console.WriteLine("Попробуйте другой ход.\n");
+                continue; 
             }
 
-            bool canMove = false;
-            if (selected.Type == Pieces.Rook)
-            {
-                Rook rook = new Rook(selected.Color);
-                canMove = rook.CanMove(start, end, board);
-            }
-            else if (selected.Type == Pieces.Pawn)
-            {
-                Pawn pawn = new Pawn(selected.Color);
-                canMove = pawn.CanMove(start, end, board);
-            }
 
-            if (!canMove)
-            {
-                continue;
-            }
 
 
             board[endRow, endCol] = board[startRow, startCol];
             board[startRow, startCol] = null;
+
+
+            string opponentColor = whiteTurn ? "Black" : "White";
+            if (!IsKingAlive(board, opponentColor))
+            {
+                DrawBoard(board); 
+                Console.WriteLine($"{currentColor} выиграли! Игра окончена.");
+                break;
+            }
+
 
             whiteTurn = !whiteTurn;
 
@@ -398,7 +447,7 @@ class Program
 
         return true;
     }
-
+    
 
     static int[] GetCopyOfArray(int[] array)
     {
