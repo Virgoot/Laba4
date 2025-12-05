@@ -9,6 +9,7 @@ using System.Runtime;
 using System.Security;
 using System.Threading.Tasks.Dataflow;
 using System.Text.RegularExpressions;
+using System.Diagnostics.Contracts;
 
 class Program
 {
@@ -30,6 +31,7 @@ class Program
                 {
                     case 1:  
                         FirstCase();
+
                         break;
 
                     case 2:
@@ -60,10 +62,30 @@ class Program
         }
     }
 
-    static string PrintArrayInfo(int[] array)
+
+    static double DoubleInput()
     {
-        return "[ " + string.Join(" ", array) + " ]";
+        double value;
+        while (!double.TryParse(Console.ReadLine(), out value))
+        {
+            Console.WriteLine("Не число");
+        }
+        return value;
     }
+
+    static int IntInput()
+    {
+        int value;
+        while (!int.TryParse(Console.ReadLine(), out value))
+        {
+            Console.WriteLine("Не число");
+        }
+        return value;
+    }
+
+   
+
+    
 
     static void PrintMenu()
     {
@@ -75,57 +97,70 @@ class Program
         Console.WriteLine("Выберите вариант (1-5): ");
     }
 
-    static void FirstCase()
+    
+    static void Guesser(double f)
     {
-        const double PI = Math.PI;
-        const double epsilon = 0.01;
+        const double EPSILON = 0.01;
 
-        Console.Write("Введите значение A: ");
-        bool validA = double.TryParse(Console.ReadLine(), out double a);
-
-        if (validA)
+        for (int i = 3; i != 0; i--)
         {
-            Console.Write("Введите значение B: ");
-            bool validB = double.TryParse(Console.ReadLine(), out double b);
+            Console.Write("Введите предполагаемый ответ: ");
+            double guess = DoubleInput();
 
-            if (validB)
+            if (Math.Abs(f - guess) < EPSILON)
             {
-
-                Console.Write("Введите предполагаемый ответ: ");
-                double userGuess = double.Parse(Console.ReadLine());
-
-                double cosB = Math.Cos(b);
-
-                if (cosB >= 0)
-                {
-                    double f = Math.Pow(Math.Sin((3 * PI / 4) + (a / 3)), 2) + Math.Sqrt(cosB);
-                    Console.WriteLine($"\nРезультат - {f:F2}");
-
-                    if (Math.Abs(f - userGuess) < epsilon)
-                    {
-                        Console.WriteLine("Правильный ответ! :)\n");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ваш ответ неправильный :(\n");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Ошибка: подкоренное выражение cos(B) < 0, вычисление невозможно.\n");
-                }
+                Console.WriteLine("Правильный ответ! :)\n");
+                return;
             }
             else
             {
-
-                Console.WriteLine("Ошибка: введите число для B!\n");
+                Console.WriteLine("Ваш ответ неправильный :(\n");
             }
+        }
+    }
+
+    static double Function(double a, double b)
+    {
+        const double PI = Math.PI;
+
+        double cosB = Math.Cos(b);
+
+        if (cosB >= 0)
+        {
+            double f = Math.Pow(Math.Sin((3 * PI / 4) + (a / 3)), 2) + Math.Sqrt(cosB);
+            return f;
         }
         else
         {
-            Console.WriteLine("Ошибка: введите число для A!\n");
+            Console.WriteLine("Ошибка: подкоренное выражение cos(B) < 0, вычисление невозможно.\n");
+            return double.NaN;
+            
         }
     }
+
+    static void FirstCase()
+    {
+        Console.Write("Введите значение A: ");
+        double a = DoubleInput();
+
+        Console.Write("Введите значение B: ");
+        double b = DoubleInput();
+
+
+        double f = Function(a, b);
+
+        if (double.IsNaN(f))
+        {          
+            return;
+        }   
+        
+
+        Guesser(f);
+
+        Console.WriteLine($"Результат - {f:f2}\n");
+    }
+
+
 
     static void SecondCase()
     {
@@ -134,99 +169,102 @@ class Program
         Console.WriteLine("----------------------------------------\n");
     }
 
-    static void ThirdCase()
+    static int EnterSizeOfArray()
     {
-        int sizeOfArray;
-
         Console.Write("Введите размер массива: ");
-        bool isSizeValidNumber = int.TryParse(Console.ReadLine(), out sizeOfArray);
+        int sizeOfArray = IntInput();
         Console.Write("\n");
 
-        if (sizeOfArray <= 0)
+        while (sizeOfArray <= 0)
         {
             Console.WriteLine("Размер массива не может быть меньше 1! \n");
+            sizeOfArray = IntInput();
+        }
+        
+        return sizeOfArray;
+    }
+    
+    static int[] CreateArray(int size)
+    {
+        int[] array = new int[size];
+
+        Random rnd = new Random();
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = rnd.Next(0, 100);
+        }
+
+
+        return array;
+    }
+
+    static void ShowArray(int[] array)
+    {
+        Console.Write("[ ");
+
+        if (array.Length <= 10)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write(array[i] + " ");
+            }
         }
         else
         {
-            int[] array = new int[sizeOfArray];
-
-
-
-            // таймер лол
-            Stopwatch stopwatch = new Stopwatch();
-
-
-
-            // Массив до сортировки
-
-
-            Console.Write("[ ");
-
-            Random rnd = new Random();
-            for (int i = 0; i < sizeOfArray; i++)
-            {
-                array[i] = rnd.Next(0, 100);
-            }
-            if (sizeOfArray <= 10)
-            {
-                for (int i = 0; i < sizeOfArray; i++)
-                {
-                    Console.Write(array[i] + " ");
-                }
-            }
-            else
-            {
-                Console.Write("Массивы не могут быть выведены на экран, так как длина массива больше 10 ");
-            }
-            Console.WriteLine("]\n");
-
-            int[] arrayForGnomeSort = GetCopyOfArray(array);
-            int[] arrayForCocktailSort = GetCopyOfArray(array);
-
-
-
-
-
-
-            // Гномья сортировка 
-            // -------------------------
-            stopwatch.Start();
-            GnomeSort(arrayForGnomeSort);
-            stopwatch.Stop();
-            Console.WriteLine($">> 1.Gnome Sort - Время выполнения сортировки: {stopwatch.Elapsed.TotalMilliseconds} мс\n");
-            // -------------------------
-
-            stopwatch.Reset();
-
-            // Сортировка перемешиванием
-            // -------------------------
-
-            stopwatch.Start();
-            CocktailSort(arrayForCocktailSort);
-            stopwatch.Stop();
-            Console.WriteLine($">> 2.Cocktail Sort - Время выполнения сортировки: {stopwatch.Elapsed.TotalMilliseconds} мс\n");
-            // -------------------------
-
-
-            // Массив после сортировки
-            // -------------------------
-            Console.WriteLine("Массив после сортировки:\n");
-            if (sizeOfArray <= 10)
-            {
-                Console.WriteLine("|-------------------------------------------------------------|");
-                Console.WriteLine($"   После Gnome Sort: {PrintArrayInfo(arrayForGnomeSort)}");
-                Console.WriteLine($"   После Cocktail Sort: {PrintArrayInfo(arrayForCocktailSort)}");
-                Console.WriteLine("|-------------------------------------------------------------|\n");
-            }
-            else
-            {
-                Console.WriteLine("[ Массивы не могут быть выведены на экран, так как длина массива больше 10 ]\n");
-            }
-
-
+            Console.Write("Массивы не могут быть выведены на экран, так как длина массива больше 10 ");
         }
+        Console.WriteLine("]\n");
+    }
+
+    static void ThirdCase()
+    {
+
+        int sizeOfArray = EnterSizeOfArray();
+        
+        
+        int[] array = CreateArray(sizeOfArray);
+
+        ShowArray(array);
 
 
+        // таймер лол
+        Stopwatch stopwatch = new Stopwatch();
+
+        // Массив до сортировки
+
+        int[] arrayForGnomeSort = GetCopyOfArray(array);
+        int[] arrayForCocktailSort = GetCopyOfArray(array);
+
+        // Гномья сортировка 
+        // -------------------------
+        stopwatch.Start();
+        GnomeSort(arrayForGnomeSort);
+        stopwatch.Stop();
+        Console.WriteLine($">> 1.Gnome Sort - Время выполнения сортировки: {stopwatch.Elapsed.TotalMilliseconds} мс\n");
+        // -------------------------
+
+        stopwatch.Reset();
+
+        // Сортировка перемешиванием
+        // -------------------------
+
+        stopwatch.Start();
+        CocktailSort(arrayForCocktailSort);
+        stopwatch.Stop();
+        Console.WriteLine($">> 2.Cocktail Sort - Время выполнения сортировки: {stopwatch.Elapsed.TotalMilliseconds} мс\n");
+        // -------------------------
+
+
+        // Массив после сортировки
+        // -------------------------
+        Console.WriteLine("Массив после сортировки:\n");
+        
+        Console.WriteLine("|-------------------------------------------------------------|");
+        Console.WriteLine($"   После Gnome Sort: ");
+        ShowArray(arrayForGnomeSort);
+        Console.WriteLine($"   После Cocktail Sort: ");
+        ShowArray(arrayForCocktailSort);
+        Console.WriteLine("|-------------------------------------------------------------|\n");
     }
 
     static Piece[,] CreateBoard()
@@ -359,20 +397,86 @@ class Program
         return true;
     }
 
-
-    static bool IsKingAlive(Piece[,] board, string color)
+    static (int row, int col)? FindKing(Piece[,] board, string color)
     {
         for (int r = 0; r < 8; r++)
         {
             for (int c = 0; c < 8; c++)
             {
-                if (board[r, c] != null && board[r, c].Type == Pieces.King && board[r, c].Color == color)
+                if (board[r, c] != null && 
+                    board[r, c].Type == Pieces.King && 
+                    board[r, c].Color == color)
                 {
-                    return true;
+                    return (r, c);
                 }
             }
         }
+        return null;
+    }
+
+    static bool IsKingChecked(Piece[,] board, string color)
+    {
+        var kingPos = FindKing(board, color);
+        if (kingPos == null) return false;
+
+        int kingRow = kingPos.Value.row;
+        int kingCol = kingPos.Value.col;
+
+        string enemy = color == "White" ? "Black" : "White";
+
+        for (int r = 0; r < 8; r++)
+        {
+            for (int c = 0; c < 8; c++)
+            {
+                Piece piece = board[r, c];
+
+                if (piece != null && piece.Color == enemy)
+                {
+                    string start = $"{(char)('A' + c)}{8 - r}";
+                    string end   = $"{(char)('A' + kingCol)}{8 - kingRow}";
+
+                    if (piece.CanMove(start, end, board))
+                        return true;
+                }
+            }
+        }
+
         return false;
+    }
+
+    static bool IsCheckmate(Piece[,] board, string color)
+    {
+        if (!IsKingChecked(board, color)) return false;
+
+        for (int r = 0; r < 8; r++)
+        {
+            for (int c = 0; c < 8; c++)
+            {
+                Piece piece = board[r, c];
+                if (piece == null || piece.Color != color) continue;
+
+                string start = $"{(char)('A' + c)}{8 - r}";
+
+                for (int rr = 0; rr < 8; rr++)
+                {
+                    for (int cc = 0; cc < 8; cc++)
+                    {
+                        string end = $"{(char)('A' + cc)}{8 - rr}";
+
+                        if (!piece.CanMove(start, end, board)) continue;
+
+                        Piece[,] clone = (Piece[,])board.Clone();
+                        clone[rr, cc] = clone[r, c];
+                        clone[r, c] = null;
+
+                        if (!IsKingChecked(clone, color))
+                            return false;
+                    }
+                }
+            }
+        }
+
+        return true; 
     }
 
 
@@ -389,6 +493,9 @@ class Program
 
             string currentColor = whiteTurn ? "White" : "Black";
 
+            string opponentColor = whiteTurn ? "Black" : "White";
+
+
             string start = MoveInput($"{currentColor} ходят. Укажите фигуру (например A2): ");
             string end = MoveInput("Укажите куда хотите походить (например A4): ");
 
@@ -401,30 +508,35 @@ class Program
             int endCol = end[0] - 'A';
 
             Piece selected = board[startRow, startCol];
+                        
 
-            if (!CheckMove(selected, currentColor, start, end, board))
-            {
-                Console.WriteLine("Попробуйте другой ход.\n");
-                continue; 
-            }
-
-
-
-
+            Piece backup = board[endRow, endCol];
             board[endRow, endCol] = board[startRow, startCol];
             board[startRow, startCol] = null;
 
-
-            string opponentColor = whiteTurn ? "Black" : "White";
-            if (!IsKingAlive(board, opponentColor))
+            if (IsKingChecked(board, currentColor))
             {
-                DrawBoard(board); 
-                Console.WriteLine($"{currentColor} выиграли! Игра окончена.");
-                break;
+                Console.WriteLine("НЕЛЬЗЯ так ходить — ваш король будет под шахом!");
+                board[startRow, startCol] = board[endRow, endCol];
+                board[endRow, endCol] = backup;
+                continue;
             }
 
 
+            if (IsKingChecked(board, opponentColor))
+            {
+                Console.WriteLine($"{opponentColor} под шахом!");
+            }
+
+            if (IsCheckmate(board, opponentColor))
+            {
+                DrawBoard(board);
+                Console.WriteLine($"МАТ! {currentColor} победили!");
+                break;
+            }
+
             whiteTurn = !whiteTurn;
+
 
         }
 
@@ -451,7 +563,13 @@ class Program
 
     static int[] GetCopyOfArray(int[] array)
     {
-        return (int[])array.Clone();
+        int[] copiedArr = new int[array.Length];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            copiedArr[i] = array[i];
+        }
+        return copiedArr;
     }
     static void GnomeSort(int[] array)
     {
