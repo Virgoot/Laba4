@@ -7,7 +7,7 @@ class Pawn : Piece
     {
         Type = Pieces.Pawn;
         Color = color;
-        Symbol = (Color == "White") ? '♟' : '♙';
+        Symbol = (Color == "White") ? '♙' : '♟';
     }
     
 //                                         A1          A4

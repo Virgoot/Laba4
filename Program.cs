@@ -508,6 +508,11 @@ class Program
             int endCol = end[0] - 'A';
 
             Piece selected = board[startRow, startCol];
+
+            if (!CheckMove(selected, currentColor, start, end, board))
+            {
+                continue;
+            }
                         
 
             Piece backup = board[endRow, endCol];
@@ -517,7 +522,7 @@ class Program
             if (IsKingChecked(board, currentColor))
             {
                 Console.WriteLine("НЕЛЬЗЯ так ходить — ваш король будет под шахом!");
-                board[startRow, startCol] = board[endRow, endCol];
+                board[startRow, startCol] = selected;
                 board[endRow, endCol] = backup;
                 continue;
             }
