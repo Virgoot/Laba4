@@ -38,7 +38,11 @@ public class ArrayProcessor
     public ArrayProcessor()
     {
         Size = 10;
-        InitializeArray();
+        array = new int[Size];
+        for (int i = 0; i < Size; i++)
+        {
+            array[i] = i + 1;
+        }
     }
 
     /// <summary>
