@@ -12,7 +12,7 @@ public class Bishop : Piece
     public Bishop(string color)
     {
         Color = color;
-        Symbol = 'B';
+        Symbol = '♝';
         Type = Pieces.Bishop;
     }
 
