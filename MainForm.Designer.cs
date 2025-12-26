@@ -104,5 +104,6 @@ namespace Laba6
         private System.Windows.Forms.Button btnArrayProcessing;
         private System.Windows.Forms.Button btnChess;
         private System.Windows.Forms.Button btnAuthor;
+        private System.Windows.Forms.Button btnExit;
     }
 }
