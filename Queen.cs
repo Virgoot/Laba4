@@ -1,5 +1,13 @@
+using System;
+/// <summary>
+/// Представляет ферзя (королеву) в шахматах
+/// </summary>
 class Queen : Piece
 {
+    /// <summary>
+    /// Инициализирует новый экземпляр ферзя указанного цвета
+    /// </summary>
+    /// <param name="color">Цвет ферзя: "White" или "Black"</param>
     public Queen(string color)
     {
         Color = color;
@@ -7,6 +15,13 @@ class Queen : Piece
         Symbol = color == "White" ? '♛' : '♕';
     }
 
+    /// <summary>
+    /// Проверяет, может ли ферзь переместиться из начальной позиции в конечную
+    /// </summary>
+    /// <param name="start">Начальная позиция в шахматной нотации (например "D1")</param>
+    /// <param name="end">Конечная позиция в шахматной нотации (например "D5")</param>
+    /// <param name="board">Двумерный массив, представляющий шахматную доску</param>
+    /// <returns>true если ход допустим для ферзя, иначе false</returns>
     public override bool CanMove(string start, string end, Piece[,] board)
     {
         int startRow = 8 - int.Parse(start[1].ToString());
