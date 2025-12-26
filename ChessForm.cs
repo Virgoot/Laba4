@@ -27,7 +27,7 @@ namespace Laba6
             dgvBoard = new DataGridView();
             dgvBoard.Location = new Point(15, 15);
             dgvBoard.Name = "dgvBoard";
-            dgvBoard.Size = new Size(502, 502);
+            dgvBoard.Size = new Size(532, 502);
             dgvBoard.AllowUserToAddRows = false;
             dgvBoard.AllowUserToDeleteRows = false;
             dgvBoard.AllowUserToResizeColumns = false;
@@ -95,13 +95,13 @@ namespace Laba6
             {
                 for (int c = 0; c < 8; c++)
                 {
-                    dgvBoard.Rows[r].Cells[c].Style.BackColor = (r + c) % 2 == 0 ? Color.WhiteSmoke : Color.DarkGray;
+                    dgvBoard.Rows[r].Cells[c].Style.BackColor = (r + c) % 2 == 0 ? Color.LightGray : Color.DimGray;
 
                     Piece piece = game.Board[r, c];
                     dgvBoard.Rows[r].Cells[c].Value = piece?.Symbol ?? ' ';
 
                     dgvBoard.Rows[r].Cells[c].Style.Font = new Font("Arial", 24F, FontStyle.Bold);
-                    dgvBoard.Rows[r].Cells[c].Style.ForeColor = piece?.Color == "White" ? Color.Black : Color.DarkRed;
+                    dgvBoard.Rows[r].Cells[c].Style.ForeColor = piece?.Color == "White" ? Color.White : Color.Black;
                     dgvBoard.Rows[r].Cells[c].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
             }
