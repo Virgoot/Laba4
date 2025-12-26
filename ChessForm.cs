@@ -176,7 +176,8 @@ namespace Laba6
         private void EndGame(string message)
         {
             UpdateStatusLabel(message);
-            dgvBoard.Enabled = false;
+            MessageBox.Show(message, "Игра окончена!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            StartNewGame();
         }
     }
 }
