@@ -17,21 +17,20 @@ namespace Laba6
 
         private void InitializeComponent()
         {
-            SuspendLayout();
-            // 
+            this.SuspendLayout();
+            //
             // ChessForm
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1106, 724);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(3, 4, 3, 4);
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "ChessForm";
-            StartPosition = FormStartPosition.CenterParent;
-            Text = "Шахматы";
-            ResumeLayout(false);
+            //
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(532, 573);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "ChessForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Шахматы";
+            this.ResumeLayout(false);
         }
 
         #endregion
