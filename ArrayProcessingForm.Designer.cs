@@ -17,147 +17,156 @@ namespace Laba6
 
         private void InitializeComponent()
         {
-            this.dgvArray = new System.Windows.Forms.DataGridView();
-            this.lblSize = new System.Windows.Forms.Label();
-            this.txtSize = new System.Windows.Forms.TextBox();
-            this.btnCreateCustom = new System.Windows.Forms.Button();
-            this.btnCreateDefault = new System.Windows.Forms.Button();
-            this.btnGenerateRandom = new System.Windows.Forms.Button();
-            this.btnSort = new System.Windows.Forms.Button();
-            this.btnFindMinMax = new System.Windows.Forms.Button();
-            this.btnCalculateAverage = new System.Windows.Forms.Button();
-            this.lblResult = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArray)).BeginInit();
-            this.SuspendLayout();
-            //
+            dgvArray = new DataGridView();
+            lblSize = new Label();
+            txtSize = new TextBox();
+            btnCreateCustom = new Button();
+            btnCreateDefault = new Button();
+            btnGenerateRandom = new Button();
+            btnSort = new Button();
+            btnFindMinMax = new Button();
+            btnCalculateAverage = new Button();
+            lblResult = new Label();
+            ((System.ComponentModel.ISupportInitialize)dgvArray).BeginInit();
+            SuspendLayout();
+            // 
             // dgvArray
-            //
-            this.dgvArray.AllowUserToAddRows = false;
-            this.dgvArray.AllowUserToDeleteRows = false;
-            this.dgvArray.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvArray.Location = new System.Drawing.Point(12, 12);
-            this.dgvArray.Name = "dgvArray";
-            this.dgvArray.RowHeadersWidth = 51;
-            this.dgvArray.RowTemplate.Height = 24;
-            this.dgvArray.Size = new System.Drawing.Size(200, 426);
-            this.dgvArray.TabIndex = 0;
-            this.dgvArray.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvArray_CellValueChanged);
-            //
+            // 
+            dgvArray.AllowUserToAddRows = false;
+            dgvArray.AllowUserToDeleteRows = false;
+            dgvArray.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvArray.Location = new Point(12, 15);
+            dgvArray.Margin = new Padding(3, 4, 3, 4);
+            dgvArray.Name = "dgvArray";
+            dgvArray.RowHeadersWidth = 51;
+            dgvArray.RowTemplate.Height = 24;
+            dgvArray.Size = new Size(200, 532);
+            dgvArray.TabIndex = 0;
+            dgvArray.CellValueChanged += dgvArray_CellValueChanged;
+            // 
             // lblSize
-            //
-            this.lblSize.AutoSize = true;
-            this.lblSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblSize.Location = new System.Drawing.Point(230, 20);
-            this.lblSize.Name = "lblSize";
-            this.lblSize.Size = new System.Drawing.Size(147, 20);
-            this.lblSize.TabIndex = 1;
-            this.lblSize.Text = "Размер массива:";
-            //
+            // 
+            lblSize.AutoSize = true;
+            lblSize.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            lblSize.Location = new Point(230, 25);
+            lblSize.Name = "lblSize";
+            lblSize.Size = new Size(151, 20);
+            lblSize.TabIndex = 1;
+            lblSize.Text = "Размер массива:";
+            // 
             // txtSize
-            //
-            this.txtSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtSize.Location = new System.Drawing.Point(380, 17);
-            this.txtSize.Name = "txtSize";
-            this.txtSize.Size = new System.Drawing.Size(70, 26);
-            this.txtSize.TabIndex = 2;
-            //
+            // 
+            txtSize.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            txtSize.Location = new Point(380, 21);
+            txtSize.Margin = new Padding(3, 4, 3, 4);
+            txtSize.Name = "txtSize";
+            txtSize.Size = new Size(70, 26);
+            txtSize.TabIndex = 2;
+            // 
             // btnCreateCustom
-            //
-            this.btnCreateCustom.Location = new System.Drawing.Point(234, 50);
-            this.btnCreateCustom.Name = "btnCreateCustom";
-            this.btnCreateCustom.Size = new System.Drawing.Size(216, 30);
-            this.btnCreateCustom.TabIndex = 3;
-            this.btnCreateCustom.Text = "Создать";
-            this.btnCreateCustom.UseVisualStyleBackColor = true;
-            this.btnCreateCustom.Click += new System.EventHandler(this.btnCreateCustom_Click);
-            //
+            // 
+            btnCreateCustom.Location = new Point(234, 62);
+            btnCreateCustom.Margin = new Padding(3, 4, 3, 4);
+            btnCreateCustom.Name = "btnCreateCustom";
+            btnCreateCustom.Size = new Size(216, 38);
+            btnCreateCustom.TabIndex = 3;
+            btnCreateCustom.Text = "Создать";
+            btnCreateCustom.UseVisualStyleBackColor = true;
+            btnCreateCustom.Click += btnCreateCustom_Click;
+            // 
             // btnCreateDefault
-            //
-            this.btnCreateDefault.Location = new System.Drawing.Point(234, 90);
-            this.btnCreateDefault.Name = "btnCreateDefault";
-            this.btnCreateDefault.Size = new System.Drawing.Size(216, 30);
-            this.btnCreateDefault.TabIndex = 4;
-            this.btnCreateDefault.Text = "Создать (по умолчанию)";
-            this.btnCreateDefault.UseVisualStyleBackColor = true;
-            this.btnCreateDefault.Click += new System.EventHandler(this.btnCreateDefault_Click);
-            //
+            // 
+            btnCreateDefault.Location = new Point(234, 112);
+            btnCreateDefault.Margin = new Padding(3, 4, 3, 4);
+            btnCreateDefault.Name = "btnCreateDefault";
+            btnCreateDefault.Size = new Size(216, 38);
+            btnCreateDefault.TabIndex = 4;
+            btnCreateDefault.Text = "Создать (по умолчанию)";
+            btnCreateDefault.UseVisualStyleBackColor = true;
+            btnCreateDefault.Click += btnCreateDefault_Click;
+            // 
             // btnGenerateRandom
-            //
-            this.btnGenerateRandom.Location = new System.Drawing.Point(234, 130);
-            this.btnGenerateRandom.Name = "btnGenerateRandom";
-            this.btnGenerateRandom.Size = new System.Drawing.Size(216, 30);
-            this.btnGenerateRandom.TabIndex = 5;
-            this.btnGenerateRandom.Text = "Сгенерировать случайно";
-            this.btnGenerateRandom.UseVisualStyleBackColor = true;
-            this.btnGenerateRandom.Click += new System.EventHandler(this.btnGenerateRandom_Click);
-            //
+            // 
+            btnGenerateRandom.Location = new Point(234, 162);
+            btnGenerateRandom.Margin = new Padding(3, 4, 3, 4);
+            btnGenerateRandom.Name = "btnGenerateRandom";
+            btnGenerateRandom.Size = new Size(216, 38);
+            btnGenerateRandom.TabIndex = 5;
+            btnGenerateRandom.Text = "Сгенерировать случайно";
+            btnGenerateRandom.UseVisualStyleBackColor = true;
+            btnGenerateRandom.Click += btnGenerateRandom_Click;
+            // 
             // btnSort
-            //
-            this.btnSort.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSort.Location = new System.Drawing.Point(234, 200);
-            this.btnSort.Name = "btnSort";
-            this.btnSort.Size = new System.Drawing.Size(216, 40);
-            this.btnSort.TabIndex = 6;
-            this.btnSort.Text = "Сортировать";
-            this.btnSort.UseVisualStyleBackColor = true;
-            this.btnSort.Click += new System.EventHandler(this.btnSort_Click);
-            //
+            // 
+            btnSort.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnSort.Location = new Point(234, 250);
+            btnSort.Margin = new Padding(3, 4, 3, 4);
+            btnSort.Name = "btnSort";
+            btnSort.Size = new Size(216, 50);
+            btnSort.TabIndex = 6;
+            btnSort.Text = "Сортировать";
+            btnSort.UseVisualStyleBackColor = true;
+            btnSort.Click += btnSort_Click;
+            // 
             // btnFindMinMax
-            //
-            this.btnFindMinMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnFindMinMax.Location = new System.Drawing.Point(234, 250);
-            this.btnFindMinMax.Name = "btnFindMinMax";
-            this.btnFindMinMax.Size = new System.Drawing.Size(216, 40);
-            this.btnFindMinMax.TabIndex = 7;
-            this.btnFindMinMax.Text = "Найти Мин/Макс";
-            this.btnFindMinMax.UseVisualStyleBackColor = true;
-            this.btnFindMinMax.Click += new System.EventHandler(this.btnFindMinMax_Click);
-            //
+            // 
+            btnFindMinMax.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnFindMinMax.Location = new Point(234, 312);
+            btnFindMinMax.Margin = new Padding(3, 4, 3, 4);
+            btnFindMinMax.Name = "btnFindMinMax";
+            btnFindMinMax.Size = new Size(216, 50);
+            btnFindMinMax.TabIndex = 7;
+            btnFindMinMax.Text = "Найти Мин/Макс";
+            btnFindMinMax.UseVisualStyleBackColor = true;
+            btnFindMinMax.Click += btnFindMinMax_Click;
+            // 
             // btnCalculateAverage
-            //
-            this.btnCalculateAverage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnCalculateAverage.Location = new System.Drawing.Point(234, 300);
-            this.btnCalculateAverage.Name = "btnCalculateAverage";
-            this.btnCalculateAverage.Size = new System.Drawing.Size(216, 40);
-            this.btnCalculateAverage.TabIndex = 8;
-            this.btnCalculateAverage.Text = "Среднее значение";
-            this.btnCalculateAverage.UseVisualStyleBackColor = true;
-            this.btnCalculateAverage.Click += new System.EventHandler(this.btnCalculateAverage_Click);
-            //
+            // 
+            btnCalculateAverage.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnCalculateAverage.Location = new Point(234, 375);
+            btnCalculateAverage.Margin = new Padding(3, 4, 3, 4);
+            btnCalculateAverage.Name = "btnCalculateAverage";
+            btnCalculateAverage.Size = new Size(216, 50);
+            btnCalculateAverage.TabIndex = 8;
+            btnCalculateAverage.Text = "Среднее значение";
+            btnCalculateAverage.UseVisualStyleBackColor = true;
+            btnCalculateAverage.Click += btnCalculateAverage_Click;
+            // 
             // lblResult
-            //
-            this.lblResult.AutoSize = true;
-            this.lblResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblResult.Location = new System.Drawing.Point(230, 380);
-            this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(125, 25);
-            this.lblResult.TabIndex = 9;
-            this.lblResult.Text = "Результат:";
-            //
+            // 
+            lblResult.AutoSize = true;
+            lblResult.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            lblResult.Location = new Point(230, 475);
+            lblResult.Name = "lblResult";
+            lblResult.Size = new Size(127, 25);
+            lblResult.TabIndex = 9;
+            lblResult.Text = "Результат:";
+            // 
             // ArrayProcessingForm
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 453);
-            this.Controls.Add(this.lblResult);
-            this.Controls.Add(this.btnCalculateAverage);
-            this.Controls.Add(this.btnFindMinMax);
-            this.Controls.Add(this.btnSort);
-            this.Controls.Add(this.btnGenerateRandom);
-            this.Controls.Add(this.btnCreateDefault);
-            this.Controls.Add(this.btnCreateCustom);
-            this.Controls.Add(this.txtSize);
-            this.Controls.Add(this.lblSize);
-            this.Controls.Add(this.dgvArray);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ArrayProcessingForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Работа с массивами";
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArray)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(797, 566);
+            Controls.Add(lblResult);
+            Controls.Add(btnCalculateAverage);
+            Controls.Add(btnFindMinMax);
+            Controls.Add(btnSort);
+            Controls.Add(btnGenerateRandom);
+            Controls.Add(btnCreateDefault);
+            Controls.Add(btnCreateCustom);
+            Controls.Add(txtSize);
+            Controls.Add(lblSize);
+            Controls.Add(dgvArray);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ArrayProcessingForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Работа с массивами";
+            ((System.ComponentModel.ISupportInitialize)dgvArray).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
