@@ -1,16 +1,29 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
+using System;
 
+/// <summary>
+/// Класс, представляющий пешку в шахматах
+/// </summary>
 class Pawn : Piece
 {
+    /// <summary>
+    /// Инициализирует новую пешку заданного цвета
+    /// </summary>
+    /// <param name="color">Цвет пешки ("White" или "Black")</param>
     public Pawn(string color)
     {
         Type = Pieces.Pawn;
         Color = color;
         Symbol = (Color == "White") ? '♟' : '♙';
     }
-    
-//                                         A1          A4
+    /// <summary>
+    /// Проверяет возможность хода пешки
+    /// </summary>
+    /// <param name="start">Начальная позиция</param>
+    /// <param name="end">Конечная позиция</param>
+    /// <param name="board">Шахматная доска</param>
+    /// <returns>true если ход возможен, иначе false</returns>
     public override bool CanMove(string start, string end, Piece[,] board)
     {
         int startRow = 8 - int.Parse(start[1].ToString());

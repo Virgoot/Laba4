@@ -1,5 +1,13 @@
+using System;
+/// <summary>
+/// Представляет коня в шахматах
+/// </summary>
 class Knight : Piece
 {
+    /// <summary>
+    /// Инициализирует новый экземпляр коня указанного цвета
+    /// </summary>
+    /// <param name="color">Цвет коня: "White" или "Black"</param>
     public Knight(string color)
     {
         Color = color;
@@ -7,6 +15,13 @@ class Knight : Piece
         Symbol = color == "White" ? '♞' : '♘';
     }
 
+    /// <summary>
+    /// Проверяет, может ли конь переместиться из начальной позиции в конечную
+    /// </summary>
+    /// <param name="start">Начальная позиция в шахматной нотации (например "B1")</param>
+    /// <param name="end">Конечная позиция в шахматной нотации (например "C3")</param>
+    /// <param name="board">Двумерный массив, представляющий шахматную доску</param>
+    /// <returns>true если ход допустим для коня, иначе false</returns>
     public override bool CanMove(string start, string end, Piece[,] board)
     {
         int startRow = 8 - int.Parse(start[1].ToString());
