@@ -25,9 +25,9 @@ namespace Laba6
         {
             // 1. Создаём и настраиваем DataGridView
             dgvBoard = new DataGridView();
-            dgvBoard.Location = new Point(12, 12);
+            dgvBoard.Location = new Point(15, 15);
             dgvBoard.Name = "dgvBoard";
-            dgvBoard.Size = new Size(482, 482);
+            dgvBoard.Size = new Size(502, 502);
             dgvBoard.AllowUserToAddRows = false;
             dgvBoard.AllowUserToDeleteRows = false;
             dgvBoard.AllowUserToResizeColumns = false;
@@ -55,9 +55,9 @@ namespace Laba6
             // Настройка Label
             lblStatus = new Label
             {
-                Location = new Point(12, 500),
+                Location = new Point(15, 530),
                 Name = "lblStatus",
-                Size = new Size(300, 30),
+                Size = new Size(320, 30),
                 Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold),
                 Text = "Ход белых"
             };
@@ -65,7 +65,7 @@ namespace Laba6
             // Настройка Button
             btnNewGame = new Button
             {
-                Location = new Point(350, 500),
+                Location = new Point(377, 530),
                 Name = "btnNewGame",
                 Size = new Size(140, 30),
                 Text = "Новая игра",

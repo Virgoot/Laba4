@@ -21,8 +21,7 @@ public class ChessGame
 
     public ChessGame()
     {
-        board = CreateBoard();
-        whiteTurn = true;
+        ResetGame();
     }
 
     public void ResetGame()
@@ -34,34 +33,36 @@ public class ChessGame
     public MoveResult MakeMove(int startRow, int startCol, int endRow, int endCol)
     {
         Piece selected = board[startRow, startCol];
-        string opponentColor = whiteTurn ? "Black" : "White";
+        string currentPlayer = CurrentPlayerColor;
+        string opponentPlayer = whiteTurn ? "Black" : "White";
 
+        // Проверяем, является ли ход в принципе допустимым
         if (!IsValidMove(selected, startRow, startCol, endRow, endCol))
         {
             return MoveResult.InvalidMove;
         }
 
-        // Сохраняем состояние для возможного отката
+        // Временно делаем ход
         Piece backup = board[endRow, endCol];
         board[endRow, endCol] = selected;
         board[startRow, startCol] = null;
 
-        // Проверяем, не оказался ли наш король под шахом
-        if (IsKingChecked(CurrentPlayerColor))
+        // Проверяем, не оказался ли наш собственный король под шахом после хода
+        if (IsKingChecked(currentPlayer))
         {
-            // Откатываем ход
+            // Если да, отменяем ход - это нелегальный ход
             board[startRow, startCol] = selected;
             board[endRow, endCol] = backup;
             return MoveResult.KingInCheck;
         }
 
-        // Ход успешен, меняем игрока
+        // Ход успешен, передаем очередь
         whiteTurn = !whiteTurn;
 
-        // Проверяем на шах и мат уже для следующего игрока
-        if (IsKingChecked(opponentColor))
+        // Теперь проверяем, поставили ли мы шах или мат сопернику
+        if (IsKingChecked(opponentPlayer))
         {
-            if (IsCheckmate(opponentColor))
+            if (IsCheckmate(opponentPlayer))
             {
                 return MoveResult.Checkmate;
             }
@@ -71,17 +72,25 @@ public class ChessGame
         return MoveResult.Success;
     }
 
+    // Проверяет, может ли фигура сделать такой ход по правилам (без учета шахов)
     private bool IsValidMove(Piece selected, int startRow, int startCol, int endRow, int endCol)
     {
-        if (selected == null) return false;
-        if (selected.Color != CurrentPlayerColor) return false;
+        if (selected == null || selected.Color != CurrentPlayerColor)
+        {
+            return false;
+        }
+
+        // Запрещаем "съедать" короля напрямую
+        Piece targetPiece = board[endRow, endCol];
+        if (targetPiece is King)
+        {
+            return false;
+        }
 
         string startPos = $"{(char)('A' + startCol)}{8 - startRow}";
         string endPos = $"{(char)('A' + endCol)}{8 - endRow}";
 
-        if (!selected.CanMove(startPos, endPos, board)) return false;
-
-        return true;
+        return selected.CanMove(startPos, endPos, board);
     }
 
     private Piece[,] CreateBoard()
@@ -103,15 +112,21 @@ public class ChessGame
         return newBoard;
     }
 
-    private bool IsKingChecked(string color)
+    // Проверяет, может ли фигура атаковать указанную клетку
+    private bool CanPieceAttack(Piece piece, int startR, int startC, int endR, int endC)
     {
-        var kingPos = FindKing(color);
+        if (piece == null) return false;
+        string startPos = $"{(char)('A' + startC)}{8 - startR}";
+        string endPos = $"{(char)('A' + endC)}{8 - endR}";
+        return piece.CanMove(startPos, endPos, board);
+    }
+
+    private bool IsKingChecked(string kingColor)
+    {
+        var kingPos = FindKing(kingColor);
         if (kingPos == null) return false;
 
-        int kingRow = kingPos.Value.row;
-        int kingCol = kingPos.Value.col;
-
-        string enemyColor = color == "White" ? "Black" : "White";
+        string enemyColor = kingColor == "White" ? "Black" : "White";
 
         for (int r = 0; r < BoardSize; r++)
         {
@@ -120,7 +135,7 @@ public class ChessGame
                 Piece piece = board[r, c];
                 if (piece != null && piece.Color == enemyColor)
                 {
-                    if (IsValidMove(piece, r, c, kingRow, kingCol))
+                    if (CanPieceAttack(piece, r, c, kingPos.Value.row, kingPos.Value.col))
                     {
                         return true;
                     }
@@ -130,47 +145,51 @@ public class ChessGame
         return false;
     }
 
-    private bool IsCheckmate(string color)
+    private bool IsCheckmate(string kingColor)
     {
-        if (!IsKingChecked(color)) return false;
+        if (!IsKingChecked(kingColor)) return false;
 
-        // Проверяем, есть ли хоть один легальный ход
+        // Проверяем, есть ли хоть один легальный ход, который выводит короля из-под шаха
         for (int r = 0; r < BoardSize; r++)
         {
             for (int c = 0; c < BoardSize; c++)
             {
                 Piece piece = board[r, c];
-                if (piece == null || piece.Color != color) continue;
+                if (piece == null || piece.Color != kingColor) continue;
 
                 for (int rr = 0; rr < BoardSize; rr++)
                 {
                     for (int cc = 0; cc < BoardSize; cc++)
                     {
-                        if (IsValidMove(piece, r, c, rr, cc))
+                        string startPos = $"{(char)('A' + c)}{8 - r}";
+                        string endPos = $"{(char)('A' + cc)}{8 - rr}";
+
+                        // Проверяем, может ли фигура в принципе пойти на эту клетку
+                        if (!piece.CanMove(startPos, endPos, board)) continue;
+
+                        // Временно делаем ход
+                        Piece backup = board[rr, cc];
+                        board[rr, cc] = piece;
+                        board[r, c] = null;
+
+                        // Если после этого хода король НЕ под шахом, значит, это не мат
+                        if (!IsKingChecked(kingColor))
                         {
-                            // Делаем временный ход
-                            Piece backup = board[rr, cc];
-                            board[rr, cc] = piece;
-                            board[r, c] = null;
-
-                            // Если после этого хода король не под шахом, то это не мат
-                            if (!IsKingChecked(color))
-                            {
-                                // Откатываем ход
-                                board[r, c] = piece;
-                                board[rr, cc] = backup;
-                                return false;
-                            }
-
-                            // Откатываем ход
+                            // Откатываем ход и возвращаем false - мы нашли спасение
                             board[r, c] = piece;
                             board[rr, cc] = backup;
+                            return false;
                         }
+
+                        // Откатываем ход в любом случае, чтобы проверить следующий
+                        board[r, c] = piece;
+                        board[rr, cc] = backup;
                     }
                 }
             }
         }
-        // Если не найдено ни одного хода, который выводит короля из-под шаха, то это мат
+
+        // Если мы перебрали все ходы и не нашли ни одного спасения, это мат
         return true;
     }
 
