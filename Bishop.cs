@@ -1,4 +1,4 @@
-using System;
+    using System;
 
 /// <summary>
 /// Класс, представляющий фигуру "Слон"
@@ -12,7 +12,7 @@ public class Bishop : Piece
     public Bishop(string color)
     {
         Color = color;
-        Symbol = '♝';
+        Symbol = 'B';
         Type = Pieces.Bishop;
     }
 
