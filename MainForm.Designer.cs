@@ -67,11 +67,24 @@ namespace Laba6
             this.btnAuthor.UseVisualStyleBackColor = true;
             this.btnAuthor.Click += new System.EventHandler(this.btnAuthor_Click);
             //
+            // btnExit
+            //
+            this.btnExit = new System.Windows.Forms.Button();
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnExit.Location = new System.Drawing.Point(50, 290);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(280, 40);
+            this.btnExit.TabIndex = 4;
+            this.btnExit.Text = "Выход";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            //
             // MainForm
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 303);
+            this.ClientSize = new System.Drawing.Size(382, 353);
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnAuthor);
             this.Controls.Add(this.btnChess);
             this.Controls.Add(this.btnArrayProcessing);

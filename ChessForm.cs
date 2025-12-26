@@ -16,32 +16,32 @@ namespace Laba6
 
         public ChessForm()
         {
-            InitializeComponent(); // Этот метод будет создан в Designer.cs
-            InitializeGameComponents(); // А этот - создадим мы сами
+            InitializeComponent();
+            InitializeGameComponents();
             StartNewGame();
         }
 
         private void InitializeGameComponents()
         {
-            // Настройка DataGridView
-            dgvBoard = new DataGridView
-            {
-                Location = new Point(12, 12),
-                Name = "dgvBoard",
-                Size = new Size(482, 482),
-                ColumnCount = 8,
-                RowCount = 8,
-                AllowUserToAddRows = false,
-                AllowUserToDeleteRows = false,
-                AllowUserToResizeColumns = false,
-                AllowUserToResizeRows = false,
-                ReadOnly = true,
-                ScrollBars = ScrollBars.None,
-                SelectionMode = DataGridViewSelectionMode.CellSelect,
-                MultiSelect = false
-            };
+            // 1. Создаём и настраиваем DataGridView
+            dgvBoard = new DataGridView();
+            dgvBoard.Location = new Point(12, 12);
+            dgvBoard.Name = "dgvBoard";
+            dgvBoard.Size = new Size(482, 482);
+            dgvBoard.AllowUserToAddRows = false;
+            dgvBoard.AllowUserToDeleteRows = false;
+            dgvBoard.AllowUserToResizeColumns = false;
+            dgvBoard.AllowUserToResizeRows = false;
+            dgvBoard.ReadOnly = true;
+            dgvBoard.ScrollBars = ScrollBars.None;
+            dgvBoard.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgvBoard.MultiSelect = false;
 
-            // Настройка колонок и строк
+            // 2. Устанавливаем количество строк и столбцов
+            dgvBoard.ColumnCount = 8;
+            dgvBoard.RowCount = 8;
+
+            // 3. Теперь, когда строки и столбцы существуют, настраиваем их
             for (int i = 0; i < 8; i++)
             {
                 dgvBoard.Columns[i].Width = 60;
@@ -50,7 +50,6 @@ namespace Laba6
                 dgvBoard.Rows[i].HeaderCell.Value = (8 - i).ToString();
             }
             dgvBoard.RowHeadersWidth = 50;
-
             dgvBoard.CellClick += DgvBoard_CellClick;
 
             // Настройка Label
@@ -74,7 +73,7 @@ namespace Laba6
             };
             btnNewGame.Click += (sender, e) => StartNewGame();
 
-            // Добавляем компоненты на форму
+            // 4. Добавляем всё на форму
             this.Controls.Add(dgvBoard);
             this.Controls.Add(lblStatus);
             this.Controls.Add(btnNewGame);
@@ -96,20 +95,16 @@ namespace Laba6
             {
                 for (int c = 0; c < 8; c++)
                 {
-                    // Цвет клетки
                     dgvBoard.Rows[r].Cells[c].Style.BackColor = (r + c) % 2 == 0 ? Color.WhiteSmoke : Color.DarkGray;
 
-                    // Фигура
                     Piece piece = game.Board[r, c];
                     dgvBoard.Rows[r].Cells[c].Value = piece?.Symbol ?? ' ';
 
-                    // Стиль текста
                     dgvBoard.Rows[r].Cells[c].Style.Font = new Font("Arial", 24F, FontStyle.Bold);
                     dgvBoard.Rows[r].Cells[c].Style.ForeColor = piece?.Color == "White" ? Color.Black : Color.DarkRed;
                     dgvBoard.Rows[r].Cells[c].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
             }
-             // Сбрасываем выделение
             dgvBoard.ClearSelection();
         }
 
@@ -117,37 +112,34 @@ namespace Laba6
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
-            if (selectedRow == null) // Первый клик - выбор фигуры
+            if (selectedRow == null)
             {
                 Piece piece = game.Board[e.RowIndex, e.ColumnIndex];
                 if (piece != null && piece.Color == game.CurrentPlayerColor)
                 {
                     selectedRow = e.RowIndex;
                     selectedCol = e.ColumnIndex;
-                    dgvBoard.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gold; // Подсветка
+                    dgvBoard.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gold;
                 }
             }
-            else // Второй клик - ход
+            else
             {
                 int startR = selectedRow.Value;
                 int startC = selectedCol.Value;
                 int endR = e.RowIndex;
                 int endC = e.ColumnIndex;
 
-                selectedRow = null; // Сбрасываем выбор
+                selectedRow = null;
                 selectedCol = null;
 
-                // Снимаем подсветку
                 DrawBoard();
 
-                if (startR == endR && startC == endC) return; // Клик по той же клетке - отмена выбора
+                if (startR == endR && startC == endC) return;
 
                 MoveResult result = game.MakeMove(startR, startC, endR, endC);
 
-                // Обновляем доску после хода
                 DrawBoard();
 
-                // Обрабатываем результат хода
                 ProcessMoveResult(result);
             }
         }
