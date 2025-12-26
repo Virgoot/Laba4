@@ -1,5 +1,13 @@
+using System;
+/// <summary>
+/// Представляет слона в шахматах
+/// </summary>
 class Bishop : Piece
 {
+    /// <summary>
+    /// Инициализирует новый экземпляр слона указанного цвета
+    /// </summary>
+    /// <param name="color">Цвет слона: "White" или "Black"</param>
     public Bishop(string color)
     {
         Color = color;
@@ -7,6 +15,13 @@ class Bishop : Piece
         Symbol = color == "White" ? '♝' : '♗';
     }
 
+    /// <summary>
+    /// Проверяет, может ли слон переместиться из начальной позиции в конечную
+    /// </summary>
+    /// <param name="start">Начальная позиция в шахматной нотации (например "C1")</param>
+    /// <param name="end">Конечная позиция в шахматной нотации (например "G5")</param>
+    /// <param name="board">Двумерный массив, представляющий шахматную доску</param>
+    /// <returns>true если ход допустим для слона, иначе false</returns>
     public override bool CanMove(string start, string end, Piece[,] board)
     {
         int startRow = 8 - int.Parse(start[1].ToString());

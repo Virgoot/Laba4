@@ -1,7 +1,15 @@
 using System.Xml;
+using System;
 
+/// <summary>
+/// Представляет ладью в шахматах
+/// </summary>
 class Rook : Piece
 {
+    /// <summary>
+    /// Инициализирует новый экземпляр ладьи указанного цвета
+    /// </summary>
+    /// <param name="color">Цвет ладьи: "White" или "Black"</param>
     public Rook(string color)
     {
         Type = Pieces.Rook;
@@ -9,7 +17,13 @@ class Rook : Piece
         Symbol = (Color == "White") ? '♜' : '♖';
     }
 
-    
+    /// <summary>
+    /// Проверяет, может ли ладья переместиться из начальной позиции в конечную
+    /// </summary>
+    /// <param name="start">Начальная позиция в шахматной нотации (например "A1")</param>
+    /// <param name="end">Конечная позиция в шахматной нотации (например "A8")</param>
+    /// <param name="board">Двумерный массив, представляющий шахматную доску</param>
+    /// <returns>true если ход допустим для ладьи, иначе false</returns>
     public override bool CanMove(string start, string end, Piece[,] board)
     {
         
