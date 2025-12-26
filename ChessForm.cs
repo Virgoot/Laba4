@@ -57,7 +57,7 @@ namespace Laba6
             {
                 Location = new Point(15, 530),
                 Name = "lblStatus",
-                Size = new Size(320, 30),
+                Size = new Size(360, 30),
                 Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold),
                 Text = "Ход белых"
             };
